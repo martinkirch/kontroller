@@ -9,10 +9,19 @@ function Player(parent, path) {
 	
 	var self = this;
 	
+	// PLAY/PAUSE
 	this.container.click(function(e) {
 		e.preventDefault();
-		self.player[0].play();
-		self.container.addClass('playing');
+		var audioElem = self.player[0]
+		
+		if (audioElem.currentTime == 0 || audioElem.ended) {
+			audioElem.play();
+			self.container.addClass('playing');
+		} else {
+			audioElem.pause();
+			audioElem.currentTime = 0;
+			self.player.trigger('ended');
+		}
 	})
 	
 	this.player.bind('ended', function(e) {
