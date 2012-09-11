@@ -18,3 +18,21 @@ h1 {
 	float:right;
 	color:#777;
 }
+
+#players {
+	
+}
+
+.player {
+	float:left;
+	padding:0.2em;
+	margin:0.5em;
+	width:8em;
+	height:8em;
+	border:1px solid #777;
+	word-wrap:break-word;
+}
+
+.playing {
+	background-color:yellow;
+}
