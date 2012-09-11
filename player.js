@@ -1,5 +1,16 @@
 /**
- * Class tied to a "Play" button - yep, the big squares
+Copyright (c) 2012, Martin Kirchgessner
+
+"THE BEER-WARE LICENSE" (Revision 42):
+<martin@mkir.ch> wrote this file. As long as you retain this notice you
+can do whatever you want with this stuff. If we meet some day, and you think
+this stuff is worth it, you can buy me a beer in return.
+*/
+
+/**
+ * Class tied to a "Play" button (the big squares)
+ * Instanciating a new one will create the button, the AUDIO (hidden) tag and 
+ * append it in the parent element.
  * @param parent HTML element
  * @param path to the sound (the "src" attribute)
  * @param (optional) should we play it as a loop ?
@@ -16,7 +27,7 @@ function Player(parent, path, loop) {
 	// PLAY/PAUSE
 	this.container.click(function(e) {
 		e.preventDefault();
-		var audioElem = self.player[0]
+		var audioElem = self.player[0];
 		
 		if (audioElem.currentTime == 0 || audioElem.ended) {
 			audioElem.play();
