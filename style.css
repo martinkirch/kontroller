@@ -36,3 +36,16 @@ h1 {
 .playing {
 	background-color:yellow;
 }
+
+.btnLoop {
+	font-size:2em;
+}
+
+.looping .btnLoop {
+	background:red;
+}
+
+.btnLoop:hover {
+	background:#333;
+	cursor:pointer;
+}
