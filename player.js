@@ -16,53 +16,67 @@ this stuff is worth it, you can buy me a beer in return.
  * @param (optional) should we play it as a loop ?
  */
 function Player(parent, path, loop) {
-	this.container = $('<li>').addClass('player');
-	this.label = $('<p>').text(path).appendTo(this.container);
-	this.loop = $('<span>').addClass('btnLoop').text('⟳') // aka UTF8's CLOCKWISE GAPPED CIRCLE ARROW FTW
-		.appendTo(this.container);
-	this.player = $('<audio>').attr({src:path, preload:'auto'}).appendTo(this.container);
+	this.id = 'player'+Player.playersCount++;
 	
-	var self = this;
+	var container = $('<li>')
+		.addClass('player')
+		.attr({id:this.id})
 	
+	var label = $('<p>').
+		text(path)
+		.appendTo(container);
+	
+	var loopBtn = $('<span>')
+		.addClass('btnLoop')
+		.text('⟳') // aka UTF8's CLOCKWISE GAPPED CIRCLE ARROW FTW
+		.appendTo(container);
+	
+	var player = $('<audio>')
+		.attr({src:path, preload:'auto'})
+		.appendTo(container);
+		
 	// PLAY/PAUSE
-	this.container.click(function(e) {
+	container.click(function(e) {
 		e.preventDefault();
-		var audioElem = self.player[0];
+		var audioElem = player[0];
 		
 		if (audioElem.currentTime == 0 || audioElem.ended) {
 			audioElem.play();
-			self.container.addClass('playing');
+			container.addClass('playing');
 		} else {
 			audioElem.pause();
 			audioElem.currentTime = 0;
-			self.player.trigger('ended');
+			player.trigger('ended');
 		}
-	})
-	
-	// End Of Playin' callback
-	this.player.bind('ended', function(e) {
-		self.container.removeClass('playing');	
 	});
 	
-	this.looping = false;
+	// End Of Playin' callback
+	player.bind('ended', function(e) {
+		container.removeClass('playing');	
+	});
 	
-	// Loop trigger
-	this.loop.click(function(e) {
+	var looping = false;
+	
+	// Loop toggler
+	loopBtn.click(function(e) {
 		e.stopPropagation();
 		
-		if (self.looping) {
-			self.container.removeClass('looping');
-			self.player.removeAttr('loop');
+		if (looping) {
+			container.removeClass('looping');
+			player.removeAttr('loop');
 		} else {
-			self.container.addClass('looping');
-			self.player.attr('loop','loop');
+			container.addClass('looping');
+			player.attr('loop','loop');
 		}
 		
-		self.looping = !self.looping;
-	})
+		looping = !self.looping;
+	});
 	
 	if (loop)
-		this.loop.click();
+		loopBtn.click();
 	
-	this.container.appendTo($(parent))
+	container.data('object', this);
+	container.appendTo($(parent));
 }
+
+Player.playersCount = 0;
