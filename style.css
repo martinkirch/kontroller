@@ -27,11 +27,12 @@ footer {
 	left:1em;
 }
 
-#players {
-	
+.players {
+	list-style:none;
 }
 
 .player {
+	display:inline;
 	float:left;
 	padding:0.2em;
 	margin:0.5em;
