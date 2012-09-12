@@ -20,7 +20,7 @@ function Player(parent, path, loop) {
 	
 	var container = $('<li>')
 		.addClass('player')
-		.attr({id:this.id})
+		.attr({id:this.id, draggable:'true'});
 	
 	var label = $('<p>').
 		text(path)
