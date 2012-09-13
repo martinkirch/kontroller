@@ -11,11 +11,10 @@ this stuff is worth it, you can buy me a beer in return.
  * Class tied to a "Play" button (the big squares)
  * Instanciating a new one will create the button, the AUDIO (hidden) tag and 
  * append it in the parent element.
- * @param parent HTML element (should better be an UL)
- * @param path to the sound (the "src" attribute)
+ * @param path to the clip (the "src" attribute)
  * @param (optional) should we play it as a loop ?
  */
-function Player(parent, path, loop) {
+function Player(path, loop) {
 	this.id = 'player'+Player.playersCount++;
 	
 	var container = $('<li>')
@@ -76,7 +75,7 @@ function Player(parent, path, loop) {
 		loopBtn.click();
 	
 	container.data('object', this);
-	container.appendTo($(parent));
+	container.appendTo($('#players'));
 }
 
 Player.playersCount = 0;

@@ -1,10 +1,19 @@
+/**
+Copyright (c) 2012, Martin Kirchgessner
+
+"THE BEER-WARE LICENSE" (Revision 42):
+<martin@mkir.ch> wrote this file. As long as you retain this notice you
+can do whatever you want with this stuff. If we meet some day, and you think
+this stuff is worth it, you can buy me a beer in return.
+*/
+
 $(document).ready(function() {
-	var parent = $('#players');
-	new Player(parent, 'loops/calgoneNimp.wav', true);
-	new Player(parent, 'jingles/batterie.wav');
-	new Player(parent, 'jingles/coucou.wav');
+	new Player('loops/calgoneNimp.wav', true);
+	new Player('jingles/batterie.wav');
+	new Player('jingles/coucou.wav');
 	
-	
+	// Put your own DB name here
+	$.db = $.couch.db("kontroller");
 	
 	// Drag and drop to re-order players
 	$(document).on('dragstart', '.player', function(e) {
@@ -52,7 +61,7 @@ $(document).ready(function() {
 			}
 		} else if (dt.files && dt.files.length > 0) { // doesn't work locally !
 			for (var i=0; i < dt.files.length; i++) {
-				// TODO use dt.files[i] slice() , .name , .size
+				Db.addClipToSet(dt.files[i])
 			}
 		}
 		
