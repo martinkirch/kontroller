@@ -1,15 +1,10 @@
 # Kontroller
 
-Your HTML-based tool for playing jingles and loops. It seems to work with Chrome, Safari and Firefox, though they all add a delay when playing loops.
+A CouchApp for managing and playing audio clips. Tested with Firefox 15.
 
-## Bring your own sounds
+## This is a work in progress
 
-
-This is made for a local use : add your own WAVs in any folder, point to them 
-in app.js, tune index.html or style.css to fit your style, then turn your home 
-in the craziest radio ever.
-
-Usage : click to play.
+So don't try it unless you're used to couchapps. 
 
 ----
 
