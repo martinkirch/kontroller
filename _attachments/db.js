@@ -15,41 +15,13 @@ var Db = {
 	 * Uploads the given file and creates a Player of our new clip
 	 * @param File object
 	 */
-	addClipToSet : function(file) {		
-		var id = $.couch.newUUID();
-		var uri = $.db.uri + id + '/' + file.name
-		
-		var reader = new FileReader();
-		
-		reader.onloadend = function (loadedEvent) {
-			if (loadedEvent.target.readyState == FileReader.DONE) {
-				
-				$.ajax({
-					url: uri,
-					type: 'PUT',
-					data: loadedEvent.target.result,
-					processData: false,
-					contentType: file.type,
-					success: function(response) {
-						var data = $.parseJSON(response);
-						var doc = {
-							_id: data.id,
-							_rev: data.rev,
-							_type: 'clip',
-							title: file.name,
-							loop:false
-						}
-						
-						new Player(doc);
-					},
-					error: function(xhr, status, error) {
-						// TODO
-					}
-				});
-				
-			}
-		}
-		
-		reader.readAsArrayBuffer(file);
+	addClipToSet : function(file) {
+		Uploader.queue(file, function(doc, file) {
+			doc._type = 'clip';
+			doc.title = file.name;
+			doc.loop = false;
+			
+			new Player(doc);
+		});
 	}
 }
