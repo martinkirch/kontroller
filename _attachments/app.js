@@ -8,10 +8,6 @@ this stuff is worth it, you can buy me a beer in return.
 */
 
 $(document).ready(function() {
-	new Player('loops/calgoneNimp.wav', true);
-	new Player('jingles/batterie.wav');
-	new Player('jingles/coucou.wav');
-	
 	// Put your own DB name here
 	$.db = $.couch.db("kontroller");
 	

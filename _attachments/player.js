@@ -11,18 +11,19 @@ this stuff is worth it, you can buy me a beer in return.
  * Class tied to a "Play" button (the big squares)
  * Instanciating a new one will create the button, the AUDIO (hidden) tag and 
  * append it in the parent element.
- * @param path to the clip (the "src" attribute)
- * @param (optional) should we play it as a loop ?
+ * @param the corresponding CouchDB document
  */
-function Player(path, loop) {
+function Player(doc) {
 	this.id = 'player'+Player.playersCount++;
+	this.doc = doc;
+	var src = $.db.uri + this.doc._id + '/' + this.doc.title
 	
 	var container = $('<li>')
 		.addClass('player')
 		.attr({id:this.id, draggable:'true'});
 	
-	var label = $('<p>').
-		text(path)
+	var label = $('<p>')
+		.text(this.doc.title)
 		.appendTo(container);
 	
 	var loopBtn = $('<span>')
@@ -31,7 +32,7 @@ function Player(path, loop) {
 		.appendTo(container);
 	
 	var player = $('<audio>')
-		.attr({src:path, preload:'auto'})
+		.attr({src:src, preload:'auto'})
 		.appendTo(container);
 		
 	// PLAY/PAUSE
@@ -71,8 +72,12 @@ function Player(path, loop) {
 		looping = !self.looping;
 	});
 	
-	if (loop)
+	if (this.doc.loop)
 		loopBtn.click();
+	
+	if (Player.playersCount == 1) {
+		$('#emptyPlayer').remove();
+	}
 	
 	container.data('object', this);
 	container.appendTo($('#players'));

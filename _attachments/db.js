@@ -30,8 +30,17 @@ var Db = {
 					data: loadedEvent.target.result,
 					processData: false,
 					contentType: file.type,
-					success: function(data) {
-						new Player(uri);
+					success: function(response) {
+						var data = $.parseJSON(response);
+						var doc = {
+							_id: data.id,
+							_rev: data.rev,
+							_type: 'clip',
+							title: file.name,
+							loop:false
+						}
+						
+						new Player(doc);
 					},
 					error: function(xhr, status, error) {
 						// TODO
