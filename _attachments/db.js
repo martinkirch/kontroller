@@ -12,7 +12,7 @@ this stuff is worth it, you can buy me a beer in return.
  */
 var Db = {
 	/**
-	 * Uploads the given file and creates a Player of our new clip
+	 * Uploads the given file and creates a Clip for it
 	 * @param File object
 	 */
 	addClipToSet : function(file) {
@@ -21,7 +21,7 @@ var Db = {
 			doc.title = file.name;
 			doc.loop = false;
 			
-			new Player(doc);
+			new Clip(doc);
 		});
 	}
 }

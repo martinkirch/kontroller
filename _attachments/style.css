@@ -27,11 +27,11 @@ footer {
 	left:1em;
 }
 
-#players {
+#clips {
 	list-style:none;
 }
 
-.player {
+.clip {
 	display:inline;
 	float:left;
 	padding:0.3em;
@@ -42,7 +42,7 @@ footer {
 	word-wrap:break-word;
 }
 
-#emptyPlayer {
+#emptyClip {
 	margin:10%;
 	padding:0.5em;
 	font-size:3em;
