@@ -22,7 +22,22 @@ function Clip(doc) {
 	
 	var container = $('<li>')
 		.addClass('clip')
-		.attr({id:this.id, draggable:'true'});
+		.attr({id:this.id, draggable:'true'})
+		.click(function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			if ( $(this).hasClass('playing')) {
+				player.stop();
+				$(this).removeClass('playing');
+			} else {
+				player.play();
+				$(this).addClass('playing');
+			}
+		})
+		.bind('ended', function(e) {
+			$(this).removeClass('playing');
+		});
 	
 	var label = $('<p>')
 		.text(this.doc.title)
@@ -33,49 +48,23 @@ function Clip(doc) {
 		.text('⟳') // aka UTF8's CLOCKWISE GAPPED CIRCLE ARROW FTW
 		.appendTo(container);
 	
-	var player = $('<audio>')
-		.attr({src:src, preload:'auto'})
-		.appendTo(container);
-		
-	// PLAY/PAUSE
-	container.click(function(e) {
-		e.preventDefault();
-		var audioElem = player[0];
-		
-		if (audioElem.currentTime == 0 || audioElem.ended) {
-			audioElem.play();
-			container.addClass('playing');
-		} else {
-			audioElem.pause();
-			audioElem.currentTime = 0;
-			player.trigger('ended');
-		}
-	});
-	
-	// End Of Playin' callback
-	player.bind('ended', function(e) {
-		container.removeClass('playing');	
-	});
-	
-	var looping = false;
+	var player = new Player(src, container);
 	
 	// Loop toggler
 	loopBtn.click(function(e) {
 		e.stopPropagation();
+		player.remove();
 		
-		if (looping) {
-			container.removeClass('looping');
-			player.removeAttr('loop');
+		if (container.hasClass('looping')) {
+			player = new Player(src, container);
 		} else {
-			container.addClass('looping');
-			player.attr('loop','loop');
+			player = new LoopPlayer(src, container);
 		}
 		
-		looping = !self.looping;
+		// TODO: save state in document
+		
+		container.toggleClass('looping');
 	});
-	
-	if (this.doc.loop)
-		loopBtn.click();
 	
 	if (Clip.clipsCount == 1) {
 		$('#emptyClip').remove();
