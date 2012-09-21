@@ -19,7 +19,17 @@ var Sets = {
 					new Clip(docs[i]);
 				};
 			}
-		})
+		});
+		
+		var selector = $('#setSelector');
+		
+		Db.getSetsList(function(sets) {
+			for (var i=0; i < sets.length; i++) {
+				selector.append(
+					$('<option>').attr('value', sets[i].id).text(sets[i].key)
+				);
+			};
+		});
 	},
 	
 	showEmpty: function() {

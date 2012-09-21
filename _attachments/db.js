@@ -78,6 +78,18 @@ var Db = {
 				callback(data.rows.map(function(row){ return row.doc}) );
 			},
 			error: Db.onError
-		})
+		});
+	},
+	
+	/**
+	 * Fetch the sets index, feed the callback with an array[{id: , key: }]
+	 */
+	getSetsList: function(callback) {
+		Db._db.view("kontroller/sets", {
+			success: function(data) {
+				callback(data.rows);
+			},
+			error: Db.onError
+		});
 	}
 }
