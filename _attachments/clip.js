@@ -73,7 +73,7 @@ Clip.prototype.toggleLoop = function() {
 		this.doc.loop = true;
 	}
 	
-	Db.updateClip(this);
+	Db.update(this.doc);
 	this.container.toggleClass('looping');
 };
 

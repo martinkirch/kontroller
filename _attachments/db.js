@@ -67,18 +67,6 @@ var Db = {
 	},
 	
 	/**
-	 * Update an existing Clip object
-	 */
-	updateClip : function(clip) {
-		clip.doc.modified_at = new Date().toJSON();
-		
-		Db._db.saveDoc(clip.doc, {
-			success: function(data) { clip.doc._rev = data.rev; },
-			error: Db.onError
-		});
-	},
-	
-	/**
 	 * Fetchs metadata about the "max" latest clips, then invoke the callback with the fetched documents array
 	 */
 	latestClips : function(max, callback) {
