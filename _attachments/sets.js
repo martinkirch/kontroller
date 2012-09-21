@@ -8,6 +8,8 @@ this stuff is worth it, you can buy me a beer in return.
 */
 
 var Sets = {
+	current: {},
+	
 	init: function() {
 		Db.latestClips(20, function(docs) {
 			if (docs.length == 0) {
@@ -20,17 +22,39 @@ var Sets = {
 		})
 	},
 	
-	showEmptySet: function() {
+	showEmpty: function() {
 		$('#clips').empty();
+		Sets.current = {};
 		$("<li>").addClass('clip')
 			.attr('id', 'emptyClip')
 			.append('Drop audio clips here !')
 			.appendTo($('#clips'));
+	},
+	
+	saveCurrent: function() {
+		if (!Sets.current.title) {
+			Sets.current.title = prompt("Please give a name to this set.");
+			Sets.current.type = 'set';
+		}
+		
+		var clipIds = [];
+		$('#clips').children('li').each(function(i, elem) {
+			clipIds.push(elem.id);
+		});
+		Sets.current.clips = clipIds;
+		
+		Db.update(Sets.current);
 	}
 };
 
 $('#newSet').click(function(e) {
 	e.preventDefault();
 	e.stopPropagation();
-	Sets.showEmptySet();
+	Sets.showEmpty();
 });
+
+$('#saveSet').click(function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+	Sets.saveCurrent();
+})

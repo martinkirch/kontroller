@@ -27,6 +27,22 @@ var Db = {
 		});
 	},
 	
+	update: function(doc, callback) {
+		var setId = !doc._id;
+		doc.modified_at = new Date().toJSON();
+		
+		Db._db.saveDoc(doc, {
+			success: function(data) {
+				doc._rev = data.rev;
+				if (setId)
+					doc._id = data.id;
+				if (callback)
+					callback(doc);
+			},
+			error: Db.onError
+		});
+	},
+	
 	/**
 	 * Uploads the given file and creates a Clip for it
 	 * @param File object
