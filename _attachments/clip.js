@@ -17,9 +17,9 @@ this stuff is worth it, you can buy me a beer in return.
  */
 function Clip(doc) {
 	var self = this;
-	
-	this.id = 'clip' + Clip.clipsCount++;
 	this.doc = doc;
+	
+	this.id = 'clip' + this.doc.id;
 	
 	for (var filename in doc._attachments) // there should be only one here
 		this.src = Db.uri + this.doc._id + '/' + filename
@@ -43,16 +43,16 @@ function Clip(doc) {
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.toggleLoop() })
 		.appendTo(this.container);
 	
-	this.player = new Player(this.src, this.container);
-		
-	if (Clip.clipsCount == 1) {
-		$('#emptyClip').remove();
-	}
-	
+	$('#emptyClip').remove();
 	this.container.appendTo($('#clips'));
+	
+	if (this.doc.loop) {
+		this.container.addClass('looping');
+		this.player = new LoopPlayer(this.src, this.container);
+	} else {
+		this.player = new Player(this.src, this.container);
+	}	
 }
-
-Clip.clipsCount = 0;
 
 Clip.prototype.togglePlayback = function() {
 	if ( this.container.hasClass('playing')) {
