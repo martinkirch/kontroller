@@ -35,6 +35,7 @@ var Db = {
 				doc.type = 'clip';
 				doc.title = file.name.substr(0, file.name.lastIndexOf('.'));
 				doc.loop = false;
+				doc.modified_at = new Date().toJSON();
 
 				Db._db.saveDoc(doc, {
 					success: function(data) {
@@ -53,9 +54,30 @@ var Db = {
 	 * Update an existing Clip object
 	 */
 	updateClip : function(clip) {
+		clip.doc.modified_at = new Date().toJSON();
+		
 		Db._db.saveDoc(clip.doc, {
 			success: function(data) { clip.doc._rev = data.rev; },
 			error: function(status, error, reason) { console.log(status + ": " + error + " - " + reason); }
 		});
+	},
+	
+	/**
+	 * Fetchs metadata about the "max" latest clips, and applies the each(doc) callback to each
+	 */
+	latestClips : function(max, each) {
+		Db._db.view("kontroller/latest-clips", {
+			include_docs: true,
+			limit: max,
+			descending: true,
+			success: function(data) {
+				for (var i=0; i < data.rows.length; i++) {
+					each(data.rows[i].doc);
+				};
+			},
+			error: function(status, error, reason) {
+				console.log(status + ": " + error + " - " + reason);
+			}
+		})
 	}
 }

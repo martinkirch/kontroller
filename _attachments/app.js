@@ -8,5 +8,7 @@ this stuff is worth it, you can buy me a beer in return.
 */
 
 $(document).ready(function() {
-	
+	Db.latestClips(20, function(doc) {
+		new Clip(doc);
+	});
 });
