@@ -19,7 +19,7 @@ var Uploader = {
 	
 	/**
 	 * @param a File object to uplaoded
-	 * @param a success callback function(created_doc, file)
+	 * @param a success callback function(created_doc)
 	 */
 	queue: function(file, success) {
 		Uploader._fileQueue.push(file);
@@ -39,7 +39,7 @@ var Uploader = {
 		if (loadedEvent.target.readyState == FileReader.DONE) {
 			var file = Uploader._fileQueue[0];
 			var id = $.couch.newUUID();
-			var uri = Db.uri + id + '/' + file.name;
+			var uri = Db.uri + id + '/' + file.name.replace(/[^0-9a-zA-Z \-_\.]/g, '');
 			
 			$.ajax({
 				url: uri,
@@ -62,7 +62,7 @@ var Uploader = {
 			_rev: data.rev,
 		}
 		
-		Uploader._callbackQueue[0](doc, Uploader._fileQueue[0]);
+		Uploader._callbackQueue[0](doc);
 		
 		Uploader._fileQueue.shift();
 		Uploader._callbackQueue.shift();

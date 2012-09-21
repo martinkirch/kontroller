@@ -16,33 +16,35 @@ var Db = {
 	
 	uri : $.couch.db("kontroller").uri,
 	
+	get: function(id, callback) {
+		Db._db.openDoc(id, {
+			success:callback,
+			error: function(status, error, reason) {
+				console.log(status + ": " + error + " - " + reason);
+			}
+		});
+	},
+	
 	/**
 	 * Uploads the given file and creates a Clip for it
 	 * @param File object
 	 */
 	addClipToSet : function(file) {
-		Uploader.queue(file, function(doc, file) {
-			doc.type = 'clip';
-			doc.title = file.name;
-			doc.loop = false;
-			
-			// STUB so attachment doesn't get removed by the following update
-			doc._attachments = {};
-			doc._attachments[file.name] = {
-				stub: true,
-				length: file.size,
-				revpos: 1,
-				content_type: file.type
-			};
-			
-			Db._db.saveDoc(doc, {
-				success: function(data) {
-					doc._rev = data.rev;
-					new Clip(doc);
-				},
-				error: function(status, error, reason) {
-					console.log(status + ": " + error + " - " + reason);
-				}
+		Uploader.queue(file, function(attachmentDoc){
+			Db.get(attachmentDoc._id, function(doc){ // re-get to have an authentic _attachments object
+				doc.type = 'clip';
+				doc.title = file.name.substr(0, file.name.lastIndexOf('.'));
+				doc.loop = false;
+
+				Db._db.saveDoc(doc, {
+					success: function(data) {
+						doc._rev = data.rev;
+						new Clip(doc);
+					},
+					error: function(status, error, reason) {
+						console.log(status + ": " + error + " - " + reason);
+					}
+				});
 			});
 		});
 	},

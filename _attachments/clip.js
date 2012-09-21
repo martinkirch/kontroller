@@ -20,7 +20,9 @@ function Clip(doc) {
 	
 	this.id = 'clip' + Clip.clipsCount++;
 	this.doc = doc;
-	this.src = Db.uri + this.doc._id + '/' + this.doc.title
+	
+	for (var filename in doc._attachments) // there should be only one here
+		this.src = Db.uri + this.doc._id + '/' + filename
 	
 	this.container = $('<li>')
 		.addClass('clip')
