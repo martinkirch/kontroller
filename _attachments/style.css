@@ -93,3 +93,17 @@ footer {
 	background:#333;
 	cursor:pointer;
 }
+
+#setsPanel {
+	clear:both;
+	padding:0.5em;
+}
+
+#setsPanel .button {
+	padding:0.2em;
+}
+
+#setsPanel .button:hover {
+	background:#00FFFF; /* cyan */
+	cursor:pointer;
+}

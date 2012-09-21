@@ -63,17 +63,15 @@ var Db = {
 	},
 	
 	/**
-	 * Fetchs metadata about the "max" latest clips, and applies the each(doc) callback to each
+	 * Fetchs metadata about the "max" latest clips, then invoke the callback with the fetched documents array
 	 */
-	latestClips : function(max, each) {
+	latestClips : function(max, callback) {
 		Db._db.view("kontroller/latest-clips", {
 			include_docs: true,
 			limit: max,
 			descending: true,
 			success: function(data) {
-				for (var i=0; i < data.rows.length; i++) {
-					each(data.rows[i].doc);
-				};
+				callback(data.rows.map(function(row){ return row.doc}) );
 			},
 			error: Db.onError
 		})

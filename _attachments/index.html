@@ -7,9 +7,12 @@
 <body>
 	<h1>Radio Phonsekarr's Kontroller</h1>
 	
-	<ul id="clips">
-		<li class="clip" id="emptyClip">Drop audio clips here !</li>
-	</ul>
+	<p id="setsPanel">
+		Set : 
+		<span href="#" class="button" id="newSet">New</span>
+	</p>
+	
+	<ul id="clips"></ul>
 	
 	<!-- JavaScript errors will show up here -->
 	<div id="errors" style="display:none;"></div>
@@ -26,6 +29,10 @@
 <script src="loop_player.js" type="text/javascript" charset="utf-8"></script>
 <script src="clip.js" type="text/javascript" charset="utf-8"></script>
 <script src="db.js" type="text/javascript" charset="utf-8"></script>
-<script src="app.js" type="text/javascript" charset="utf-8"></script>
-
+<script src="sets.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+	$(document).ready(function() {
+		Sets.init();
+	});
+</script>
 </html>
