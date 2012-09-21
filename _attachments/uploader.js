@@ -39,7 +39,7 @@ var Uploader = {
 		if (loadedEvent.target.readyState == FileReader.DONE) {
 			var file = Uploader._fileQueue[0];
 			var id = $.couch.newUUID();
-			var uri = $.db.uri + id + '/' + file.name;
+			var uri = Db.uri + id + '/' + file.name;
 			
 			$.ajax({
 				url: uri,

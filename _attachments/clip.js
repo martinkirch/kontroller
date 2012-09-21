@@ -16,65 +16,68 @@ this stuff is worth it, you can buy me a beer in return.
  * @param the corresponding CouchDB document
  */
 function Clip(doc) {
+	var self = this;
+	
 	this.id = 'clip' + Clip.clipsCount++;
 	this.doc = doc;
-	var src = $.db.uri + this.doc._id + '/' + this.doc.title
+	this.src = Db.uri + this.doc._id + '/' + this.doc.title
 	
-	var container = $('<li>')
+	this.container = $('<li>')
 		.addClass('clip')
 		.attr({id:this.id, draggable:'true'})
-		.click(function(e) {
-			e.preventDefault();
-			e.stopPropagation();
-			
-			if ( $(this).hasClass('playing')) {
-				player.stop();
-				$(this).removeClass('playing');
-			} else {
-				player.play();
-				$(this).addClass('playing');
-			}
-		})
-		.bind('ended', function(e) {
+		.click(function(e){e.stopPropagation(); e.preventDefault(); self.togglePlayback() })
+		.on('ended', function(e) {
 			$(this).removeClass('playing');
-		});
+		})
+		.data('object', this);
 	
-	var label = $('<p>')
+	this.label = $('<p>')
 		.text(this.doc.title)
-		.appendTo(container);
+		.appendTo(this.container);
 	
-	var loopBtn = $('<span>')
+	this.loopBtn = $('<span>')
 		.addClass('btnLoop')
 		.text('⟳') // aka UTF8's CLOCKWISE GAPPED CIRCLE ARROW FTW
-		.appendTo(container);
+		.click(function(e){e.stopPropagation(); e.preventDefault(); self.toggleLoop() })
+		.appendTo(this.container);
 	
-	var player = new Player(src, container);
-	
-	// Loop toggler
-	loopBtn.click(function(e) {
-		e.stopPropagation();
-		player.remove();
+	this.player = new Player(this.src, this.container);
 		
-		if (container.hasClass('looping')) {
-			player = new Player(src, container);
-		} else {
-			player = new LoopPlayer(src, container);
-		}
-		
-		// TODO: save state in document
-		
-		container.toggleClass('looping');
-	});
-	
 	if (Clip.clipsCount == 1) {
 		$('#emptyClip').remove();
 	}
 	
-	container.data('object', this);
-	container.appendTo($('#clips'));
+	this.container.appendTo($('#clips'));
 }
 
 Clip.clipsCount = 0;
+
+Clip.prototype.togglePlayback = function() {
+	if ( this.container.hasClass('playing')) {
+		this.player.stop();
+		this.container.removeClass('playing');
+	} else {
+		this.player.play();
+		this.container.addClass('playing');
+	}
+};
+
+Clip.prototype.toggleLoop = function() {	
+	this.player.remove();
+	
+	if (this.container.hasClass('looping')) {
+		this.player = new Player(this.src, this.container);
+		this.doc.loop = false;
+	} else {
+		this.player = new LoopPlayer(this.src, this.container);
+		this.doc.loop = true;
+	}
+	
+	Db.updateClip(this);
+	this.container.toggleClass('looping');
+};
+
+
 
 // Drag and drop to re-order clips
 $(document).on('dragstart', '.clip', function(e) {

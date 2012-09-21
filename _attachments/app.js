@@ -8,6 +8,5 @@ this stuff is worth it, you can buy me a beer in return.
 */
 
 $(document).ready(function() {
-	// Put your own DB name here
-	$.db = $.couch.db("kontroller");
+	
 });
