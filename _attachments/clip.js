@@ -19,14 +19,12 @@ function Clip(doc) {
 	var self = this;
 	this.doc = doc;
 	
-	this.id = 'clip' + this.doc.id;
-	
 	for (var filename in doc._attachments) // there should be only one here
 		this.src = Db.uri + this.doc._id + '/' + filename
 	
 	this.container = $('<li>')
 		.addClass('clip')
-		.attr({id:this.id, draggable:'true'})
+		.attr({id:this.doc._id, draggable:'true'})
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.togglePlayback() })
 		.on('ended', function(e) {
 			$(this).removeClass('playing');
