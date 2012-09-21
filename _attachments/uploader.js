@@ -47,10 +47,10 @@ var Uploader = {
 				data: loadedEvent.target.result,
 				processData: false,
 				contentType: file.type,
-				success: Uploader._onUploaded
-				/*error: function(xhr, status, error) {
-					TODO
-				}*/
+				success: Uploader._onUploaded,
+				error: function(xhr, status, error) {
+					$('#errors').show().append("<p>Can't upload file to "+uri+": "+status+" - "+error+"</p>");
+				}
 			});
 		}
 	},

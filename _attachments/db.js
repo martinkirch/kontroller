@@ -16,12 +16,14 @@ var Db = {
 	
 	uri : $.couch.db("kontroller").uri,
 	
+	onError : function(status, error, reason) {
+		$('#errors').show().append("<p>"+status+": "+error+" - "+reason+"</p>");
+	},
+	
 	get: function(id, callback) {
 		Db._db.openDoc(id, {
 			success:callback,
-			error: function(status, error, reason) {
-				console.log(status + ": " + error + " - " + reason);
-			}
+			error: Db.onError
 		});
 	},
 	
@@ -42,9 +44,7 @@ var Db = {
 						doc._rev = data.rev;
 						new Clip(doc);
 					},
-					error: function(status, error, reason) {
-						console.log(status + ": " + error + " - " + reason);
-					}
+					error: Db.onError
 				});
 			});
 		});
@@ -58,7 +58,7 @@ var Db = {
 		
 		Db._db.saveDoc(clip.doc, {
 			success: function(data) { clip.doc._rev = data.rev; },
-			error: function(status, error, reason) { console.log(status + ": " + error + " - " + reason); }
+			error: Db.onError
 		});
 	},
 	
@@ -75,9 +75,7 @@ var Db = {
 					each(data.rows[i].doc);
 				};
 			},
-			error: function(status, error, reason) {
-				console.log(status + ": " + error + " - " + reason);
-			}
+			error: Db.onError
 		})
 	}
 }

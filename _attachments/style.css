@@ -27,6 +27,25 @@ footer {
 	left:1em;
 }
 
+#errors {
+	position: absolute;
+	border: 2px solid red;
+	background: white;
+	color: black;
+	font-family: monospace;
+	bottom:1em;
+	left:1em;
+	margin:1em;
+	padding:1em;
+	height:1em;
+	overflow:hidden;
+}
+
+#errors:hover {
+	height:20em;
+	overflow:scroll;
+}
+
 #clips {
 	list-style:none;
 }
