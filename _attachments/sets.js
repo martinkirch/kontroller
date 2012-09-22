@@ -53,7 +53,24 @@ var Sets = {
 		});
 		Sets.current.clips = clipIds;
 		
-		Db.update(Sets.current);
+		Db.update(Sets.current, function(doc) {
+			$('#setSelector').append(
+				$('<option>').attr('value', doc._id).text(doc.title)
+			).val(doc._id);
+		});
+	},
+	
+	load: function(id) {
+		Db.get(id, function(doc) {
+			Sets.current = doc;
+		});
+		
+		Db.listClipsBySet(id, function(docs) {
+			$('#clips').empty();
+			for (var i=0; i < docs.length; i++) {
+				new Clip(docs[i]);
+			};
+		});
 	}
 };
 
@@ -68,3 +85,12 @@ $('#saveSet').click(function(e) {
 	e.stopPropagation();
 	Sets.saveCurrent();
 })
+
+$('#setSelector').change(function(e) {
+	var selectedId = $(this).val();
+	if (selectedId == -1) {
+		Sets.showEmpty();
+	} else {
+		Sets.load(selectedId);
+	}
+});

@@ -91,5 +91,20 @@ var Db = {
 			},
 			error: Db.onError
 		});
+	},
+	
+	/**
+	 * Given a setId, fetch metadata about its contained clips, then invoke the callback with the fetched documents array
+	 */
+	listClipsBySet: function(setId, callback) {
+		Db._db.view("kontroller/clipsBySet", {
+			startkey: setId + '-0',
+			endkey: setId + '-99999',
+			include_docs: true,
+			success: function(data) {
+				callback(data.rows.map(function(row){ return row.doc}) );
+			},
+			error: Db.onError
+		});
 	}
 }
