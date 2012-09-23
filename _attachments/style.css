@@ -70,11 +70,12 @@ h1 {
 
 .clip {
 	position:relative;
+	font-size:1.3em;
 	float:left;
-	width:8em;
-	height:8em;
-	padding:0.3em;
-	margin:0.3em;
+	width:6em;
+	height:6em;
+	padding:0.2em;
+	margin:0.2em;
 	border:1px solid #4A5564;
 	word-wrap:break-word;
 	background:#AAB2B7;
@@ -120,11 +121,14 @@ h1 {
 }
 
 .clip .button {
-	font-size:1.5em;
-	display:inline-block;
+	display:none;
 	padding:0 3px;
 	height:1.2em;
 	vertical-align:middle;
+}
+
+.clip:hover .button {
+	display:inline-block;
 }
 
 .clip .button:hover {
@@ -134,6 +138,7 @@ h1 {
 
 .looping .btnLoop {
 	background:#FF6400;
+	display:inline-block;
 }
 
 #setsPanel {
