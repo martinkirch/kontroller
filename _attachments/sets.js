@@ -10,6 +10,12 @@ this stuff is worth it, you can buy me a beer in return.
 var Sets = {
 	current: {},
 	
+	resetState: function() {
+		$('#clips').empty();
+		Sets.current = {};
+		$('#setSelector').val(-1);
+	},
+	
 	init: function() {
 		Sets.showLatestClips();
 		
@@ -25,8 +31,7 @@ var Sets = {
 	},
 	
 	showLatestClips : function() {
-		$('#clips').empty();
-		Sets.current = {};
+		Sets.resetState();
 
 		Db.latestClips(20, function(docs) {
 			if (docs.length == 0) {
@@ -40,8 +45,7 @@ var Sets = {
 	},
 	
 	showEmpty: function() {
-		$('#clips').empty();
-		Sets.current = {};
+		Sets.resetState();
 		$("<li>").addClass('clip')
 			.attr('id', 'emptyClip')
 			.append('Drop audio clips here !')
@@ -50,7 +54,11 @@ var Sets = {
 	
 	saveCurrent: function() {
 		if (!Sets.current.title) {
-			Sets.current.title = prompt("Please give a name to this set.");
+			var input = prompt("Please give a name to this set.");
+			if (!input) {
+				return;
+			}
+			Sets.current.title = input;
 			Sets.current.type = 'set';
 		}
 		
@@ -93,6 +101,12 @@ $('#saveSet').click(function(e) {
 	Sets.saveCurrent();
 });
 
+$('#latestClips').click(function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+	Sets.showLatestClips();
+});
+
 $('#deleteSet').click(function(e) {
 	e.preventDefault();
 	e.stopPropagation();
@@ -107,9 +121,7 @@ $('#deleteSet').click(function(e) {
 		setTimeout(function() { $(btn).text('Delete') }, 3000);
 	} else if (Sets.current._id) {
 		Db.delete(Sets.current, function() {
-			var deleted = $('#setSelector').children(':selected');
-			$('#setSelector').val(-1);
-			deleted.remove();
+			$('#setSelector').children(':selected').remove();
 			Sets.showLatestClips();
 		});
 	}
