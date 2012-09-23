@@ -42,6 +42,13 @@ function Clip(doc) {
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.toggleLoop(); })
 		.appendTo(this.container);
 	
+	this.editBtn = $('<span>')
+		.addClass('btnEdit button')
+		.attr('title', 'Edit clip title')
+		.text('✎') // LOVER RIGHT PENCIL
+		.click(function(e){e.stopPropagation(); e.preventDefault(); self.editTitle(); })
+		.appendTo(this.container);
+	
 	this.removeBtn = $('<span>')
 		.addClass('btnRemove button')
 		.attr('title', 'Remove from set')
@@ -96,7 +103,14 @@ Clip.prototype.removeFromSet = function() {
 	}
 }
 
-
+Clip.prototype.editTitle = function() {
+	var newTitle = prompt('Clip title :', this.doc.title);
+	if (newTitle) {
+		this.doc.title = newTitle;
+		this.label.text(newTitle);
+		Db.update(this.doc);
+	}
+}
 
 // Drag and drop to re-order clips
 $(document).on('dragstart', '.clip', function(e) {

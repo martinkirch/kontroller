@@ -116,6 +116,8 @@ h1 {
 	display:inline-block;
 	padding:0 3px;
 	background:#D9DDE2;
+	vertical-align:bottom;
+	height:1.2em;
 }
 
 .clip .button:hover {
