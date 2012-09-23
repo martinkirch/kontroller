@@ -68,13 +68,24 @@ footer {
 	width:80%;
 	height:2em;
 	text-align:center;
-	border:1px dashed #777;
+}
+
+#deleteClip {
+	position:absolute;
+	font-size:1.5em;
+	width:18em;
+	height:1em;
+	text-align:center;
+	right:1em;
+	bottom:1em;
+	padding:0.5em;
 }
 
 .draggedOver {
 	border-left : 0.4em dotted blue;
 	margin-left : 0.2em;
 	background:#222;
+	border:1px solid white;
 }
 
 .playing {

@@ -101,9 +101,11 @@ $(document).on('dragstart', '.clip', function(e) {
 	var data = e.originalEvent.dataTransfer;
 	var container = $(e.target).data('object');
 	
-	data.setData('application/x-id', container.id);
+	data.setData('application/x-id', $(e.target).attr('id'));
 	data.effectAllowed = "move";
 	data.dropEffect = "move";
+	
+	$('#deleteClip').show();
 	
 }).on('dragenter', '.clip', function(e) {
 	var dt = e.originalEvent.dataTransfer;
@@ -134,16 +136,21 @@ $(document).on('dragstart', '.clip', function(e) {
 	
 	if (dt.types.contains('application/x-id')) {
 		var sourceId = '#' + dt.getData('application/x-id');
-
-		if ($(this).next('li').length == 0) {
+		
+		if ($(this).is('#deleteClip')) {
+			Db.delete($(sourceId).data('object').doc, function() {
+				$(sourceId).empty().remove();
+			});
+		} else if ($(this).next('li').length == 0) {
 			$(sourceId).detach().insertAfter($(this));
 		} else {
 			$(sourceId).detach().insertBefore($(this));
 		}
 	} else if (dt.files && dt.files.length > 0) { // doesn't work locally !
 		for (var i=0; i < dt.files.length; i++) {
-			Db.addClipToSet(dt.files[i])
+			Db.addClipToSet(dt.files[i]);
 		}
 	}
 	
+	$('#deleteClip').hide();
 });

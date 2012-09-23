@@ -43,6 +43,20 @@ var Db = {
 		});
 	},
 	
+	delete: function(doc, callback) {
+		var id = {
+			_id: doc._id,
+			_rev: doc._rev
+		};
+		Db._db.removeDoc(id, {
+			success: function(data) {
+				if (data.ok)
+					callback();
+			},
+			error: Db.onError
+		});
+	},
+	
 	/**
 	 * Uploads the given file and creates a Clip for it
 	 * @param File object
