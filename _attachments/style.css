@@ -69,12 +69,12 @@ h1 {
 }
 
 .clip {
-	display:inline;
+	position:relative;
 	float:left;
-	padding:0.3em;
-	margin:0.3em;
 	width:8em;
 	height:8em;
+	padding:0.3em;
+	margin:0.3em;
 	border:1px solid #4A5564;
 	word-wrap:break-word;
 	background:#AAB2B7;
@@ -111,13 +111,20 @@ h1 {
 	background-color:yellow;
 }
 
+.clip .buttons {
+	background:#D9DDE2;
+	position:absolute;
+	bottom:-1;
+	left:-1;
+	border:1px solid #4A5564;
+}
+
 .clip .button {
 	font-size:1.5em;
 	display:inline-block;
 	padding:0 3px;
-	background:#D9DDE2;
-	vertical-align:bottom;
 	height:1.2em;
+	vertical-align:middle;
 }
 
 .clip .button:hover {

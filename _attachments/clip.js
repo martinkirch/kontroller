@@ -14,8 +14,9 @@ this stuff is worth it, you can buy me a beer in return.
  * Drag'n'drop callbacks follow
  * append it in the parent element.
  * @param the corresponding CouchDB document
+ * @param Clip's background color - optional, defaults to a random value
  */
-function Clip(doc) {
+function Clip(doc, color) {
 	var self = this;
 	this.doc = doc;
 	
@@ -24,6 +25,7 @@ function Clip(doc) {
 	
 	this.container = $('<li>')
 		.addClass('clip')
+		.css('background', color ? color : Clip.generateRandomColor())
 		.attr({id:this.doc._id, draggable:'true'})
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.togglePlayback() })
 		.on('ended', function(e) {
@@ -35,26 +37,30 @@ function Clip(doc) {
 		.text(this.doc.title)
 		.appendTo(this.container);
 	
+	var buttons = $('<p>')
+		.addClass('buttons')
+		.appendTo(this.container);
+	
 	this.loopBtn = $('<span>')
 		.addClass('btnLoop button')
 		.attr('title', 'Loop')
 		.text('⟳') // aka UTF8's CLOCKWISE GAPPED CIRCLE ARROW FTW
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.toggleLoop(); })
-		.appendTo(this.container);
+		.appendTo(buttons);
 	
 	this.editBtn = $('<span>')
 		.addClass('btnEdit button')
 		.attr('title', 'Edit clip title')
 		.text('✎') // LOVER RIGHT PENCIL
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.editTitle(); })
-		.appendTo(this.container);
+		.appendTo(buttons);
 	
 	this.removeBtn = $('<span>')
 		.addClass('btnRemove button')
 		.attr('title', 'Remove from set')
 		.text('x')
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.removeFromSet(); })
-		.appendTo(this.container);
+		.appendTo(buttons);
 	
 	$('#emptyClip').remove();
 	this.container.appendTo($('#clips'));
@@ -110,6 +116,13 @@ Clip.prototype.editTitle = function() {
 		this.label.text(newTitle);
 		Db.update(this.doc);
 	}
+}
+
+Clip.generateRandomColor = function() {
+	var dict = '56789ABCDEF';
+	return '#' + (function lol(c) {
+		return dict[Math.floor(Math.random() * dict.length)] + (c && lol(c-1));
+	})(4);
 }
 
 // Drag and drop to re-order clips
