@@ -37,12 +37,14 @@ function Clip(doc) {
 	
 	this.loopBtn = $('<span>')
 		.addClass('btnLoop button')
+		.attr('title', 'Loop')
 		.text('⟳') // aka UTF8's CLOCKWISE GAPPED CIRCLE ARROW FTW
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.toggleLoop(); })
 		.appendTo(this.container);
 	
 	this.removeBtn = $('<span>')
 		.addClass('btnRemove button')
+		.attr('title', 'Remove from set')
 		.text('x')
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.removeFromSet(); })
 		.appendTo(this.container);
