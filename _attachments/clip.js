@@ -55,6 +55,13 @@ function Clip(doc, color) {
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.editTitle(); })
 		.appendTo(buttons);
 	
+	this.recolorBtn = $('<span>')
+		.addClass('btnRecolor button')
+		.attr('title', 'Change clip color')
+		.text('❐')
+		.click(function(e){e.stopPropagation(); e.preventDefault(); self.recolor(); })
+		.appendTo(buttons);
+	
 	this.removeBtn = $('<span>')
 		.addClass('btnRemove button')
 		.attr('title', 'Remove from set')
@@ -118,8 +125,12 @@ Clip.prototype.editTitle = function() {
 	}
 }
 
+Clip.prototype.recolor = function() {
+	this.container.css('background', Clip.generateRandomColor());
+}
+
 Clip.generateRandomColor = function() {
-	var dict = '56789ABCDEF';
+	var dict = '456789ABCDEF';
 	return '#' + (function lol(c) {
 		return dict[Math.floor(Math.random() * dict.length)] + (c && lol(c-1));
 	})(4);
