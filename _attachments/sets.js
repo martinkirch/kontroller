@@ -11,15 +11,7 @@ var Sets = {
 	current: {},
 	
 	init: function() {
-		Db.latestClips(20, function(docs) {
-			if (docs.length == 0) {
-				Sets.showEmptySet();
-			} else {
-				for (var i=0; i < docs.length; i++) {
-					new Clip(docs[i]);
-				};
-			}
-		});
+		Sets.showLatestClips();
 		
 		var selector = $('#setSelector');
 		
@@ -29,6 +21,21 @@ var Sets = {
 					$('<option>').attr('value', sets[i].id).text(sets[i].key)
 				);
 			};
+		});
+	},
+	
+	showLatestClips : function() {
+		$('#clips').empty();
+		Sets.current = {};
+
+		Db.latestClips(20, function(docs) {
+			if (docs.length == 0) {
+				Sets.showEmptySet();
+			} else {
+				for (var i=0; i < docs.length; i++) {
+					new Clip(docs[i]);
+				};
+			}
 		});
 	},
 	
@@ -84,7 +91,29 @@ $('#saveSet').click(function(e) {
 	e.preventDefault();
 	e.stopPropagation();
 	Sets.saveCurrent();
-})
+});
+
+$('#deleteSet').click(function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+	
+	if (!Sets.current._id) {
+		$(this).text('Not saved !');
+		var btn = this;
+		setTimeout(function() { $(btn).text('Delete') }, 3000);
+	} else if ($(this).text().trim() == 'Delete') {
+		$(this).text('Sure ?');
+		var btn = this;
+		setTimeout(function() { $(btn).text('Delete') }, 3000);
+	} else if (Sets.current._id) {
+		Db.delete(Sets.current, function() {
+			var deleted = $('#setSelector').children(':selected');
+			$('#setSelector').val(-1);
+			deleted.remove();
+			Sets.showLatestClips();
+		});
+	}
+});
 
 $('#setSelector').change(function(e) {
 	var selectedId = $(this).val();
