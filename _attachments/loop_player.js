@@ -26,11 +26,9 @@ function LoopPlayer (src, container) {
 	$(elems).appendTo(container);
 	
 	$(elems[0]).one('play', function(e) {
-		console.log("ONE 0 volume="+this.volume);
 		this.pause();
 		
 		$(elems[1]).one('play', function(e) {
-			console.log("ONE 1 volume="+this.volume);
 			this.pause();
 			
 			// Now that the first (silent) playback is over, this will set up the loop once we start playing elem[0]
