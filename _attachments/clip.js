@@ -36,9 +36,15 @@ function Clip(doc) {
 		.appendTo(this.container);
 	
 	this.loopBtn = $('<span>')
-		.addClass('btnLoop')
+		.addClass('btnLoop button')
 		.text('⟳') // aka UTF8's CLOCKWISE GAPPED CIRCLE ARROW FTW
-		.click(function(e){e.stopPropagation(); e.preventDefault(); self.toggleLoop() })
+		.click(function(e){e.stopPropagation(); e.preventDefault(); self.toggleLoop(); })
+		.appendTo(this.container);
+	
+	this.removeBtn = $('<span>')
+		.addClass('btnRemove button')
+		.text('x')
+		.click(function(e){e.stopPropagation(); e.preventDefault(); self.removeFromSet(); })
 		.appendTo(this.container);
 	
 	$('#emptyClip').remove();
@@ -76,6 +82,17 @@ Clip.prototype.toggleLoop = function() {
 	Db.update(this.doc);
 	this.container.toggleClass('looping');
 };
+
+Clip.prototype.removeFromSet = function() {
+	if (this.removeBtn.text().trim() == 'x') {
+		this.removeBtn.text('Sure ?');
+		var btn = this.removeBtn;
+		setTimeout(function() { btn.text('x'); }, 3000);
+	} else {
+		this.container.empty();
+		this.container.remove();
+	}
+}
 
 
 
