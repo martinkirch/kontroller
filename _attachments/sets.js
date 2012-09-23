@@ -64,15 +64,22 @@ var Sets = {
 		
 		var clipIds = [];
 		$('#clips').children('li').each(function(i, elem) {
-			clipIds.push(elem.id);
+			clipIds.push({
+				id: elem.id,
+				color: $(elem).css('background-color')
+			});
 		});
 		Sets.current.clips = clipIds;
 		
-		Db.update(Sets.current, function(doc) {
-			$('#setSelector').append(
-				$('<option>').attr('value', doc._id).text(doc.title)
-			).val(doc._id);
-		});
+		if (Sets.current._id) {
+			Db.update(Sets.current, function(doc){});
+		} else {
+			Db.update(Sets.current, function(doc) {
+				$('#setSelector').append(
+					$('<option>').attr('value', doc._id).text(doc.title)
+				).val(doc._id);
+			});
+		}
 	},
 	
 	load: function(id) {
@@ -80,11 +87,10 @@ var Sets = {
 			Sets.current = doc;
 		});
 		
-		Db.listClipsBySet(id, function(docs) {
-			$('#clips').empty();
-			for (var i=0; i < docs.length; i++) {
-				new Clip(docs[i]);
-			};
+		$('#clips').empty();
+		
+		Db.listClipsBySet(id, function(doc, color) {
+			new Clip(doc, color);
 		});
 	}
 };

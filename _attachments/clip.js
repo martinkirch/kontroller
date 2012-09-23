@@ -23,9 +23,14 @@ function Clip(doc, color) {
 	for (var filename in doc._attachments) // there should be only one here
 		this.src = Db.uri + this.doc._id + '/' + filename
 	
+	if (color && color.length > 0)
+		this.background = color
+	else
+		this.background = Clip.generateRandomColor()
+	
 	this.container = $('<li>')
 		.addClass('clip')
-		.css('background', color ? color : Clip.generateRandomColor())
+		.css('background', this.background)
 		.attr({id:this.doc._id, draggable:'true'})
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.togglePlayback() })
 		.on('ended', function(e) {
@@ -126,7 +131,8 @@ Clip.prototype.editTitle = function() {
 }
 
 Clip.prototype.recolor = function() {
-	this.container.css('background', Clip.generateRandomColor());
+	this.background = Clip.generateRandomColor();
+	this.container.css('background', this.background);
 }
 
 Clip.generateRandomColor = function() {

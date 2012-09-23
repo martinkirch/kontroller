@@ -116,7 +116,10 @@ var Db = {
 			endkey: setId + '-99999',
 			include_docs: true,
 			success: function(data) {
-				callback(data.rows.map(function(row){ return row.doc}) );
+				for (var i=0; i < data.rows.length; i++) {
+					var row = data.rows[i];
+					callback(row.doc, row.value.color);
+				};
 			},
 			error: Db.onError
 		});
