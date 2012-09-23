@@ -1,3 +1,13 @@
+/*
+	base colors:
+#AAB2B7 (base)
+#D9DDE2 (lighter)
+#4A5564 (darker)
+#E9F10D (yellow)
+#4437FF (blue)
+#FF6400 (orange)
+*/
+
 * {
 	margin:0;
 	padding:0;
@@ -5,18 +15,10 @@
 }
 
 body {
-	background: black url('alphonse.png') no-repeat fixed right bottom;
-	color:white;
-	font:small Verdana,Geneva,Arial,Helvetica,sans-serif; 
-}
-
-h1 {
-	font-weight:lighter;
-	letter-spacing:0.3em;
-	padding:0.3;
-	font-size:4em;
-	float:right;
-	color:#777;
+	background: #AAB2B7 url('alphonse.png') no-repeat fixed right bottom;
+	color:black;
+	font:small Helvetica,Verdana,Geneva,Arial,sans-serif;
+	font-weight:bold;
 }
 
 footer {
@@ -25,6 +27,22 @@ footer {
 	position:absolute;
 	bottom:2px;
 	left:1em;
+}
+
+h1 {
+	font-weight:lighter;
+	letter-spacing:0.3em;
+	font-size:4em;
+	text-align:right;
+	color:#D9DDE2;
+	margin:0 0 -0.25em 0;
+	background:#AAB2B7;
+}
+
+#h1baseline {
+	clear:both;
+	padding:-0.5em;
+	background:#D9DDE2;
 }
 
 #errors {
@@ -54,11 +72,12 @@ footer {
 	display:inline;
 	float:left;
 	padding:0.3em;
-	margin:0.5em;
+	margin:0.3em;
 	width:8em;
 	height:8em;
-	border:1px solid #777;
+	border:1px solid #4A5564;
 	word-wrap:break-word;
+	background:#AAB2B7;
 }
 
 #emptyClip {
@@ -84,7 +103,7 @@ footer {
 .draggedOver {
 	border-left : 0.4em dotted blue;
 	margin-left : 0.2em;
-	background:#222;
+	background:#D9DDE2;
 	border:1px solid white;
 }
 
@@ -96,27 +115,41 @@ footer {
 	font-size:1.5em;
 	display:inline-block;
 	padding:0 3px;
+	background:#D9DDE2;
 }
 
 .clip .button:hover {
-	background:#333;
+	background:white;
 	cursor:pointer;
 }
 
 .looping .btnLoop {
-	background:red;
+	background:#FF6400;
 }
 
 #setsPanel {
-	clear:both;
-	padding:0.5em;
+	position: absolute;
+	top:1em;
+	left:1em;
+}
+
+#setSelector {
+	background: #D9DDE2;
+	border: 1px solid #4A5564;
+	color:black;
+	vertical-align:baseline;
+}
+
+#setSelector option {
+	padding:0.1em 1em;
+	font-size:1.2em;
 }
 
 #setsPanel .button {
-	padding:0.2em;
+	padding:0.5em 1em;
 }
 
 #setsPanel .button:hover {
-	background:#00FFFF; /* cyan */
+	background:#4437FF;
 	cursor:pointer;
 }
