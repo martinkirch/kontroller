@@ -9,7 +9,7 @@ this stuff is worth it, you can buy me a beer in return.
 
 /**
  * Wrap TWO <AUDIO> players for loops playback
- * Manual looping allow seamless loops - inspired by Géza Szekeres' method (http://onoffline.hu/html5loop/), with an additional trick !
+ * Manual looping allow seamless loops - inspired by Géza Szekeres' method (http://onoffline.hu/html5loop/), with additional tricks !
  * @param the src attribute
  * @param its enclosing jQuery element
  */
@@ -17,41 +17,48 @@ function LoopPlayer (src, container) {
 	var playing = false;
 	var timeout = false;
 	
-	/**
-	 * The "loop" attribute insert a short delay between loops during playback.
-	 * So we loop manually with a timer
-	 * On load they will play a first time silently, because the first playback has a delay too
-	 */
-	function createAudio(src) {
-		var elem = $('<audio>')
-			.attr({src:src, preload:'auto', autoplay:'true'})
-			.one('play', function(e) {
-				e.preventDefault();
-				e.stopPropagation();
-				
-				this.pause();
-				this.currentTime = 0;
-				this.volume = 1;
-				
-				// Now that the first (silent) playback is over, this will set up the loop once we start playing elem[0]
-				$(this).on('play', function(e) {
-					playing = (playing+1) % 2;
-					timeout = setTimeout(function(){elems[playing].play()}, this.duration * 1000);
-					elems[playing].currentTime = 0;
-					elems[playing].pause();
-				});
-			})
-			.get()[0];
-		
-		elem.volume = 0;
-		return elem;
-	}
+	var elems = Array();
+	elems[0] = $('<audio>').attr({src:src, preload:'auto'}).get()[0];
+	elems[0].volume = 0;
+	elems[1] = $('<audio>').attr({src:src, preload:'auto'}).get()[0];
+	elems[1].volume = 0;
 	
-	var elems = Array(createAudio(src), createAudio(src));
 	$(elems).appendTo(container);
 	
+	$(elems[0]).one('play', function(e) {
+		console.log("ONE 0 volume="+this.volume);
+		this.pause();
+		
+		$(elems[1]).one('play', function(e) {
+			console.log("ONE 1 volume="+this.volume);
+			this.pause();
+			
+			// Now that the first (silent) playback is over, this will set up the loop once we start playing elem[0]
+			$(elems).on('play', function(e) {
+				console.log("ON");
+				playing = (playing+1) % 2;
+				timeout = setTimeout(function(){elems[playing].play()}, this.duration * 1000);
+				elems[playing].pause();
+				elems[playing].currentTime = 0;
+				
+				e.preventDefault();
+				e.stopPropagation();
+			});
+			
+			elems[0].volume = 1;
+			elems[1].volume = 1;
+		});
+		
+		elems[1].play();
+	});
+	
+	elems[0].play();
+	
 	this.play = function() {
+		elems[0].currentTime = 0;
+		elems[1].currentTime = 0;
 		elems[0].play();
+		playing = 0;
 	}
 	
 	this.stop = function() {
