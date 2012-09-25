@@ -32,6 +32,9 @@ var Uploader = {
 		if (!Uploader._uploading && Uploader._fileQueue.length > 0) {
 			Uploader._uploading = true;
 			Uploader._reader.readAsArrayBuffer(Uploader._fileQueue[0]);
+			$('#uploadingFlag').show();
+		} else {
+			$('#uploadingFlag').hide();
 		}
 	},
 	

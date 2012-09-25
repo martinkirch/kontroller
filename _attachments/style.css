@@ -167,3 +167,16 @@ h1 {
 	background:#4437FF;
 	cursor:pointer;
 }
+
+#uploadingFlag {
+	position:absolute;
+	top:0;
+	left:50%;
+	margin-left:-6em;
+	width:12em;
+	padding:1em;
+	font-weight:bold;
+	color:white;
+	background:red;
+	text-align:center;
+}
