@@ -34,7 +34,10 @@ function Clip(doc, color) {
 		.attr({id:this.doc._id, draggable:'true'})
 		.click(function(e){e.stopPropagation(); e.preventDefault(); self.togglePlayback() })
 		.on('ended', function(e) {
-			$(this).removeClass('playing');
+			$(this).removeClass('playing').css({
+				background: self.background,
+				color: 'black'
+			});
 		})
 		.data('object', this);
 	
@@ -88,10 +91,13 @@ function Clip(doc, color) {
 Clip.prototype.togglePlayback = function() {
 	if ( this.container.hasClass('playing')) {
 		this.player.stop();
-		this.container.removeClass('playing');
+		this.container.trigger('ended');
 	} else {
 		this.player.play();
-		this.container.addClass('playing');
+		this.container.addClass('playing').css({
+			background:'black',
+			color:'white'
+		});
 	}
 };
 
