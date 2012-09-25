@@ -86,7 +86,7 @@ function Clip(doc, color) {
 	} else {
 		this.player = new Player(this.src, this.container);
 	}	
-}
+};
 
 Clip.prototype.togglePlayback = function() {
 	if ( this.container.hasClass('playing')) {
@@ -125,7 +125,7 @@ Clip.prototype.removeFromSet = function() {
 		this.container.empty();
 		this.container.remove();
 	}
-}
+};
 
 Clip.prototype.editTitle = function() {
 	var newTitle = prompt('Clip title :', this.doc.title);
@@ -134,19 +134,40 @@ Clip.prototype.editTitle = function() {
 		this.label.text(newTitle);
 		Db.update(this.doc);
 	}
-}
+};
 
 Clip.prototype.recolor = function() {
 	this.background = Clip.generateRandomColor();
 	this.container.css('background', this.background);
-}
+};
 
 Clip.generateRandomColor = function() {
 	var dict = '456789ABCDEF';
 	return '#' + (function lol(c) {
 		return dict[Math.floor(Math.random() * dict.length)] + (c && lol(c-1));
 	})(4);
-}
+};
+
+// wrap the DataTransfer tests for portability purpose
+Clip.isDraggedClipOrFiles = function(dataTransfer) {
+	var t = dataTransfer.types;
+	
+	if (t.indexOf) { // chrome
+		return t.indexOf('application/x-id') >= 0 || t.indexOf('Files') >= 0 || dataTransfer.files != null;
+	} else if (t.contains) { // firefox
+		return t.contains('application/x-id') || t.contains('Files') || dataTransfer.files != null;
+	}
+};
+Clip.isDraggedClip = function(dataTransfer) {
+	var t = dataTransfer.types;
+	
+	if (t.indexOf) { // chrome
+		return t.indexOf('application/x-id') >= 0;
+	} else if (t.contains) { // firefox
+		return t.contains('application/x-id');
+	}
+};
+
 
 // Drag and drop to re-order clips
 $(document).on('dragstart', '.clip', function(e) {
@@ -162,7 +183,7 @@ $(document).on('dragstart', '.clip', function(e) {
 }).on('dragenter', '.clip', function(e) {
 	var dt = e.originalEvent.dataTransfer;
 	
-	if (dt.types.contains('application/x-id') || dt.types.contains('Files') || dt.files != null) {
+	if (Clip.isDraggedClipOrFiles(dt)) {
 		$(this).addClass('draggedOver');
 		e.stopPropagation();
 		e.preventDefault();
@@ -171,7 +192,7 @@ $(document).on('dragstart', '.clip', function(e) {
 }).on('dragover', '.clip', function(e) {
 	var dt = e.originalEvent.dataTransfer;
 
-	if (dt.types.contains('application/x-id') || dt.types.contains('Files') || dt.files != null) {
+	if (Clip.isDraggedClipOrFiles(dt)) {
 		e.stopPropagation();
 		e.preventDefault();
 	}
@@ -186,7 +207,7 @@ $(document).on('dragstart', '.clip', function(e) {
 	
 	var dt = e.originalEvent.dataTransfer;
 	
-	if (dt.types.contains('application/x-id')) {
+	if (Clip.isDraggedClip(dt)) {
 		var sourceId = '#' + dt.getData('application/x-id');
 		
 		if ($(this).is('#deleteClip')) {
@@ -198,7 +219,7 @@ $(document).on('dragstart', '.clip', function(e) {
 		} else {
 			$(sourceId).detach().insertBefore($(this));
 		}
-	} else if (dt.files && dt.files.length > 0) { // doesn't work locally !
+	} else if (dt.files && dt.files.length > 0) {
 		for (var i=0; i < dt.files.length; i++) {
 			Db.addClipToSet(dt.files[i]);
 		}
