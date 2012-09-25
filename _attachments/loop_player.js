@@ -33,7 +33,6 @@ function LoopPlayer (src, container) {
 			
 			// Now that the first (silent) playback is over, this will set up the loop once we start playing elem[0]
 			$(elems).on('play', function(e) {
-				console.log("ON");
 				playing = (playing+1) % 2;
 				timeout = setTimeout(function(){elems[playing].play()}, this.duration * 1000);
 				elems[playing].pause();
